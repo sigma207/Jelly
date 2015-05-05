@@ -1,0 +1,81 @@
+.dynamicTable {
+    /*transform: scale(1,0.5);*/
+    /*transform: translate(50px,100px);*/
+    /*position: relative;*/
+    /*padding-top: 50px;*/
+
+}
+
+.dragOverColumn {
+    border-style: dashed;
+}
+
+.baseTD {
+    padding-left: 1px;
+}
+
+.numberTD {
+    padding-right: 2px;
+    text-align: right;
+}
+
+.basicTH {
+
+}
+
+.stockRiseZh{
+    color: #ad0000;
+}
+
+.stockFallZh{
+    color: #00a900;
+}
+
+.forexRise{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #00a900;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexRiseArrow{
+    display: inline-block;
+    background: url('../images/triangle_01.png');
+    width: 10px;
+    height: 12px;
+    /*border: 5px solid;*/
+    /*border-color: transparent transparent #00ff00 transparent;*/
+}
+
+.forexFall{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #ad0000;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexFallArrow{
+    display: inline-block;
+    background: url('../images/triangle_04.png');
+    width: 10px;
+    height: 12px;
+}
+
+.arrowDiv {
+    position: relative;
+    /*right: -5px;*/
+}
+
+.descArrow {
+    display: inline-block;
+    border: 5px solid;
+    border-color: #00AACC transparent transparent transparent;
+}
+
+.ascArrow {
+    display: inline-block;
+    border: 5px solid;
+    border-color: transparent transparent #00AACC transparent;
+}
