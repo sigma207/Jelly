@@ -447,7 +447,7 @@ function drawGuideWires(index) {
     var data = drawData.valueList[info.timeStartIndex + index];
     ctx.strokeStyle = "gray";
     ctx.drawHorizontalLine(chartArea.x, data.valueY, chartArea.right);
-    ctx.drawVerticalLine(data.x, chartArea.top, chartArea.right);
+    ctx.drawVerticalLine(data.x, chartArea.y, chartArea.top);
     ctx.beginPath();
     ctx.strokeStyle = "#FF7C00";
     ctx.fillStyle = "white";

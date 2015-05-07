@@ -34,7 +34,6 @@ function contentLoad() {
     if (currentContentUrl == contentUrl.index) {
         onIndexLoad();
     } else {
-
         //$(".subTitleHead").css("backgroundImage", "url('images/banner_bg.png')");//用load之後的css沒用,只好手動設
         switch (currentContentUrl) {
             case contentUrl.menu1:
@@ -58,14 +57,20 @@ function init() {
 
 function menuClick(e) {
     var menuItem = $(e.currentTarget);
+    var menuIndex = menuItem.parent().index();//div -parent--> li
     if(!menuItem.hasClass("menuDisable")){
-        $(".menuItem").addClass("menu").removeClass("menuDisable");
-        menuItem.removeClass("menu");
-        menuItem.addClass("menuDisable");
-        var menuIndex = menuItem.parent().index();//div -parent--> li
-        currentContentUrl = contentUrl["menu" + (menuIndex + 1)];
-        loadContentUrl();
+        goMenu(menuIndex);
     }
+}
+
+function goMenu(menuIndex){
+    var allMenu = $(".menuItem");
+    allMenu.addClass("menu").removeClass("menuDisable");
+    var menuItem =  allMenu.eq(menuIndex);
+    menuItem.removeClass("menu");
+    menuItem.addClass("menuDisable");
+    currentContentUrl = contentUrl["menu" + (menuIndex + 1)];
+    loadContentUrl();
 }
 
 function logoClick(e) {
@@ -101,6 +106,7 @@ function onIndexLoad() {
 function changeLang(lang) {
     var option = {resGetPath: "locales/" + lang + "/jelly.json"};
     i18n.init(option, function (t) {
+        document.title = t("main.pageTitle");
         $(".container").i18n();
     });
 }
