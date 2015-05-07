@@ -6,7 +6,9 @@
 }
 
 .bannerContainer {
+    /*background-image: url('../../images/banner_bg.png');*/
     position: relative;
+    /*width: 1160px;*/
     height: 270px;
 }
 

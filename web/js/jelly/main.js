@@ -45,7 +45,8 @@ function contentLoad() {
 }
 function init() {
     logo = $(".logo");
-    $(".menuItem").on("click", menuClick);
+    //$(".menuItem").on("click", menuClick);
+    $(".menuImgItem").on("click", menuClick);
     logo.on("click", logoClick);
     langSelect = $("#langSelect");
     langSelect.change(function (e) {
@@ -58,15 +59,33 @@ function init() {
 function menuClick(e) {
     var menuItem = $(e.currentTarget);
     var menuIndex = menuItem.parent().index();//div -parent--> li
-    if(!menuItem.hasClass("menuDisable")){
-        goMenu(menuIndex);
+    //if (!menuItem.hasClass("menuDisable")) {
+    //    goMenu(menuIndex);
+    //}
+    if (!menuItem.hasClass("")) {
+        goMenuImg(menuIndex);
     }
 }
+function goMenuImg(menuIndex) {
+    var allMenu = $(".menuImgItem");
 
-function goMenu(menuIndex){
+    allMenu.each(function (index) {
+        if(index==menuIndex){
+            $(this).removeClass("menu"+(index+1));
+            $(this).addClass("menu"+(index+1)+"Selected");
+        }else{
+            $(this).removeClass("menu"+(index+1)+"Selected");
+            $(this).addClass("menu"+(index+1));
+        }
+    });
+    currentContentUrl = contentUrl["menu" + (menuIndex + 1)];
+    loadContentUrl();
+}
+
+function goMenu(menuIndex) {
     var allMenu = $(".menuItem");
     allMenu.addClass("menu").removeClass("menuDisable");
-    var menuItem =  allMenu.eq(menuIndex);
+    var menuItem = allMenu.eq(menuIndex);
     menuItem.removeClass("menu");
     menuItem.addClass("menuDisable");
     currentContentUrl = contentUrl["menu" + (menuIndex + 1)];
@@ -74,7 +93,12 @@ function goMenu(menuIndex){
 }
 
 function logoClick(e) {
-    $(".menuItem").addClass("menu").removeClass("menuDisable");
+    var allMenu = $(".menuImgItem");
+    allMenu.each(function (index) {
+        $(this).removeClass("menu"+(index+1)+"Selected");
+        $(this).addClass("menu"+(index+1));
+    });
+    //$(".menuItem").addClass("menu").removeClass("menuDisable");
     currentContentUrl = contentUrl.index;
     loadContentUrl();
 }

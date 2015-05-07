@@ -71,7 +71,7 @@ html, body {
 .navContainer {
     float: right;
     text-align: right;
-    margin-top: 70px;
+    margin-top: 60px;
 }
 
 .menuItem{
@@ -102,6 +102,77 @@ html, body {
     color: #ff7c00;
     border-top: #ff7c00 5px solid;
     font-weight: bolder;
+}
+
+.menuImgItem {
+    margin-left: 10px;
+    width: 110px;
+    height: 45px;
+}
+
+.menu1 {
+    background-image: url('../../images/top_menu_01.png');
+}
+
+.menu2 {
+    background-image: url('../../images/top_menu_02.png');
+}
+
+.menu3 {
+    background-image: url('../../images/top_menu_03.png');
+}
+
+.menu4 {
+    background-image: url('../../images/top_menu_04.png');
+}
+
+.menu5 {
+    background-image: url('../../images/top_menu_05.png');
+}
+
+.menu1:hover {
+    background-image: url('../../images/top_menu_on_01.png');
+    cursor: pointer;
+}
+
+.menu2:hover {
+    background-image: url('../../images/top_menu_on_02.png');
+    cursor: pointer;
+}
+
+.menu3:hover {
+    background-image: url('../../images/top_menu_on_03.png');
+    cursor: pointer;
+}
+
+.menu4:hover {
+    background-image: url('../../images/top_menu_on_04.png');
+    cursor: pointer;
+}
+
+.menu5:hover {
+    background-image: url('../../images/top_menu_on_05.png');
+    cursor: pointer;
+}
+
+.menu1Selected {
+    background-image: url('../../images/top_menu_on_01.png');
+}
+
+.menu2Selected {
+    background-image: url('../../images/top_menu_on_02.png');
+}
+
+.menu3Selected {
+    background-image: url('../../images/top_menu_on_03.png');
+}
+
+.menu4Selected {
+    background-image: url('../../images/top_menu_on_04.png');
+}
+
+.menu5Selected {
+    background-image: url('../../images/top_menu_on_05.png');
 }
 
 .footer {
