@@ -31,8 +31,8 @@ var DragTable = {
         dt.RISE_FALL_STYLE = "riseFallStyle";
         dt.FOREX_RISE_CLASS = "forexRise";
         dt.FOREX_FALL_CLASS = "forexFall";
-        dt.STOCK_RISE_CLASS = "stockRiseZh";
-        dt.STOCK_FALL_CLASS = "stockFallZh";
+        dt.STOCK_RISE_CLASS = "stockRise";
+        dt.STOCK_FALL_CLASS = "stockFall";
         dt.STOCK_CHANGE_COLOR_FIELD = "stockChangeColorField";
         dt.ORDER_BY = "orderBy";
         dt.DESC = "desc";
@@ -95,7 +95,7 @@ var DragTable = {
             var thObj = {
                 "th": $th,
                 "type": $th.attr(dt.COLUMN_TYPE),
-                "decimal": $th.attr(dt.DECIMAL) || 0,
+                "decimal": $th.attr(dt.DECIMAL),
                 "field": $th.attr(dt.FIELD),
                 "stockChangeColorField": $th.attr(dt.STOCK_CHANGE_COLOR_FIELD),
                 "riseFallStyle": $th.attr(dt.RISE_FALL_STYLE),
@@ -113,10 +113,12 @@ var DragTable = {
                     format = "%";
                 //break;
                 case "number":
-                    for (var i = 0; i < thObj.decimal; i++) {
-                        digit += "0";
+                    if (JsonTool.isInt(parseInt(thObj.decimal))) {
+                        for (var i = 0; i < thObj.decimal; i++) {
+                            digit += "0";
+                        }
+                        format = "0,0." + digit + format;
                     }
-                    format = "0,0." + digit + format;
                     break;
                 case "date":
                     originalFormat = dt.DATA_DATE_FORMATE;
@@ -258,24 +260,24 @@ var DragTable = {
             }
             dt.$table.find("tbody").html(dt.renderTBody);
             dt.trList = dt.$table.find("tbody").children();
-            dt.trList.each(function(index){
-               $(this).click(dt.onRowClick);
+            dt.trList.each(function (index) {
+                $(this).click(dt.onRowClick);
             });
             //console.timeEnd("renderDom");
         };
 
-        dt.onRowClick = function(e){
+        dt.onRowClick = function (e) {
             var tr = e.currentTarget;
             //var evt = new Event("rowClick");
             var tableClass = dt.tableClass;
             var rowIndex = $(tr).attr("rowIndex");
             var rowData = dt.data[rowIndex];
-            $( document ).trigger( "rowClick", [ tableClass, rowIndex,rowData ] );
+            $(document).trigger("rowClick", [tableClass, rowIndex, rowData]);
             //document.dispatchEvent(evt);
         };
 
         dt.generateTr = function (rowIndex) {
-            var tr = "<tr rowIndex='"+rowIndex+"'>";
+            var tr = "<tr rowIndex='" + rowIndex + "'>";
             var thObj;
             for (var colIndex = 0; colIndex < dt.columnSize; colIndex++) {
                 thObj = dt.thObjList[colIndex];
@@ -297,11 +299,11 @@ var DragTable = {
             var tdClass = dt.generateTdClass(thObj, rowData);
             var tdStyle = dt.generateStyle(thObj.display);
             var tdValue = dt.generateValue(thObj, rowData);
-            tdValue = dt.generateTdDiv(thObj,rowData,tdValue);
+            tdValue = dt.generateTdDiv(thObj, rowData, tdValue);
             return "<td" + tdClass + tdStyle + ">" + tdValue + "</td>";
         };
 
-        dt.generateTdDiv = function(thObj,rowData,tdValue){
+        dt.generateTdDiv = function (thObj, rowData, tdValue) {
             var stockChangeColorField = thObj[dt.STOCK_CHANGE_COLOR_FIELD];
             var tdDiv = "";
             var divClass = "";
@@ -309,19 +311,19 @@ var DragTable = {
             var riseFallStyle = thObj[dt.RISE_FALL_STYLE];
             if (typeof riseFallStyle !== typeof undefined && riseFallStyle !== false) {
                 var change = rowData[stockChangeColorField];
-                if(riseFallStyle=="forex"){
+                if (riseFallStyle == "forex") {
                     if (change >= 0) {
                         divClass += " " + dt.FOREX_RISE_CLASS;
-                        afterDiv += "<div class='forexRiseArrow'></div>";
+                        //afterDiv += "<div class='forexRiseArrow'></div>";
                     } else {
                         divClass += " " + dt.FOREX_FALL_CLASS;
-                        afterDiv += "<div class='forexFallArrow'></div>";
+                        //afterDiv += "<div class='forexFallArrow'></div>";
                     }
                 }
             }
-            if(divClass!=""||afterDiv!=""){
-                tdDiv = "<div class='"+divClass+"'>"+tdValue+"</div>"+afterDiv;
-            }else{
+            if (divClass != "" || afterDiv != "") {
+                tdDiv = "<div class='" + divClass + "'>" + tdValue + "</div>" + afterDiv;
+            } else {
                 tdDiv = tdValue;
             }
             return tdDiv;
@@ -375,13 +377,52 @@ var DragTable = {
         dt.generateValue = function (thObj, rowData) {
             var value = rowData[thObj.field];
             if (thObj.format != "") {
-                //console.log("format="+thObj.format+",value="+value);
                 return numeral(value).format(thObj.format);
             } else if (thObj.dateTimeFormat != "") {
                 return moment(value, thObj.originalFormat).format(thObj.dateTimeFormat);
+            } else if (thObj.type == "number" && thObj.format == "") {
+                if (!JsonTool.isInt(thObj.decimal)) {
+                    var decimal = rowData[thObj.decimal];
+                    var digit = "";
+                    for (var i = 0; i < decimal; i++) {
+                        digit += "0";
+                    }
+                    return numeral(value).format("0,0." + digit);
+                }
+
             } else {
                 return value;
             }
+        };
+        dt.changeLang = function (lang) {
+
+        };
+
+        dt.lastStockRiseClass = "";
+        dt.lastStockFallClass = "";
+        dt.lastForexRiseClass = "";
+        dt.lastForexFallClass = "";
+        dt.changeLangClass = function (lang) {
+            //dt.FOREX_RISE_CLASS = "forexRise";
+            //dt.FOREX_FALL_CLASS = "forexFall";
+            var table = $("." + tableClass);
+            var newStockRiseClass = dt.STOCK_RISE_CLASS+"-"+lang;
+            var newStockFallClass = dt.STOCK_FALL_CLASS+"-"+lang;
+            var newForexRiseClass = dt.FOREX_RISE_CLASS+"-"+lang;
+            var newForexFallClass = dt.FOREX_FALL_CLASS+"-"+lang;
+            table.find("."+dt.STOCK_RISE_CLASS).removeClass(dt.lastStockRiseClass).addClass(newStockRiseClass);
+            table.find("."+dt.STOCK_FALL_CLASS).removeClass(dt.lastStockFallClass).addClass(newStockFallClass);
+            table.find("."+dt.FOREX_RISE_CLASS).removeClass(dt.lastForexRiseClass).addClass(newForexRiseClass);
+            table.find("."+dt.FOREX_FALL_CLASS).removeClass(dt.lastForexFallClass).addClass(newForexFallClass);
+            //rise.removeClass(dt.lastStockRiseClass);
+            //rise.addClass(newStockRiseClass);
+            //fall.removeClass(dt.lastStockFallClass);
+            //fall.addClass(newStockFallClass);
+            dt.lastStockRiseClass = newStockRiseClass;
+            dt.lastStockFallClass = newStockFallClass;
+            dt.lastForexRiseClass = newForexRiseClass;
+            dt.lastForexFallClass = newForexFallClass;
+
         };
         /**
          * ------------------------------------------------------------------

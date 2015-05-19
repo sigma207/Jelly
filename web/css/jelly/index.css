@@ -52,7 +52,7 @@ th {
 }
 
 th, td {
-    height: 30px;
+    height: 25px;
 }
 
 .oddTr {
@@ -79,7 +79,7 @@ th, td {
 .quoteContainer {
     float: left;
     width: 640px;
-    height: 250px;
+    height: 192px;
     border: 1px solid #FF7C00;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -89,7 +89,7 @@ th, td {
 .quoteItem {
     float: left;
     width: 319px;
-    height: 250px;
+    height: 192px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -97,7 +97,7 @@ th, td {
 
 .canvasContainer {
     float: left;
-    height: 250px;
+    height: 192px;
     border: 1px solid #FF7C00;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -116,7 +116,7 @@ th, td {
     position: relative;
     float: left;
     width: 320px;
-    height: 250px;
+    height: 110px;
     background-image: -webkit-linear-gradient(270deg, rgba(255, 251, 248, 1.00) 0%, rgba(251, 233, 217, 1.00) 100%);
     background-image: -moz-linear-gradient(270deg, rgba(255, 251, 248, 1.00) 0%, rgba(251, 233, 217, 1.00) 100%);
     background-image: -o-linear-gradient(270deg, rgba(255, 251, 248, 1.00) 0%, rgba(251, 233, 217, 1.00) 100%);
@@ -143,8 +143,8 @@ th, td {
 
 .more {
     position: absolute;
-    right: 20px;
-    bottom: 20px;
+    top: 13px;
+    right: 10px;
 }
 
 .more a {

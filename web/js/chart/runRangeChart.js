@@ -250,7 +250,7 @@ function drawRangeTimeText() {
 
 function drawValueText() {
     ctx.save();
-    ctx.font = "10px Helvetica";
+    ctx.font = "10px 微軟正黑體";
     ctx.textAlign = "right";
     var x = valueAxis.x - 5;
     var y = valueAxis.y;
@@ -260,6 +260,21 @@ function drawValueText() {
         tick = valueTickList[i];
         ctx.fillStyle = tick.color;
         ctx.fillText(numeral(tick.top).format("0,0.00"), x, y - convertValueY(tick.top));
+    }
+    ctx.restore();
+}
+
+function drawVolumeText() {
+    ctx.save();
+    ctx.font = "8px 微軟正黑體";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "bottom";
+    ctx.fillStyle = "blue";
+    var x = volumeAxis.x - 5;
+    var y = volumeAxis.y;
+    var volumeTickList = info.volumeTicks();
+    for (var i = 0; i < volumeTickList.length; i++) {
+        ctx.fillText(volumeTickList[i], x, y - convertVolumeY(volumeTickList[i]));
     }
     ctx.restore();
 }
@@ -274,21 +289,6 @@ function drawValueDashLine() {
         tick = valueTickList[i];
         y = valueAxis.y - convertValueY(tick.top);
         ctx.drawDashLine(valueAxis.x, y, chartArea.right, y, 2);
-    }
-    ctx.restore();
-}
-
-function drawVolumeText() {
-    ctx.save();
-    ctx.font = "8px Helvetica";
-    ctx.textBaseline = "bottom";
-    ctx.textAlign = "right";
-    ctx.fillStyle = "blue";
-    var x = volumeAxis.x - 5;
-    var y = volumeAxis.y;
-    var volumeTickList = info.volumeTicks();
-    for (var i = 0; i < volumeTickList.length; i++) {
-        ctx.fillText(volumeTickList[i], x, y - convertVolumeY(volumeTickList[i]));
     }
     ctx.restore();
 }

@@ -2,20 +2,23 @@
  * Created by user on 2015/4/21.
  */
 var forexName = ["美元 人民幣", "美元 日圓", "歐元 美元", "英鎊 美元"];
+var forexDecimal = [4,2,4,4];
 var metalName = ["倫敦金", "倫敦銀"];
+var metalDecimal = [2,2];
 var forexMetalName = forexName.concat(metalName);
-var stockName = ["浦發銀行", "白雲機場", "武鋼股份", "東風汽車", "IF1505", "IF1506"];
+var forexMetalDecimal = forexDecimal.concat(metalDecimal);
+var stockName = ["浦發銀行", "白雲機場", "武鋼股份", "東風汽車", "滬深300期貨05", "滬深300期貨06"];
 var forexTemplate = {
     //name:'@PICK(["美元 日圓","歐元 美元","英鎊 美元","美元 人民幣","倫敦金","倫敦銀"])',
     //"buying": '@FLOAT(118,120,5,5)',//IE8出來的數字會有問題
     "buying": function () {
-        return JsonTool.formatFloat(JsonTool.random(118, 120), 5);
+        return JsonTool.formatFloat(JsonTool.random(118.999, 119.005), 5);
     },
     "selling": function () {
-        return JsonTool.formatFloat(JsonTool.random(118, 120), 5);
+        return JsonTool.formatFloat(JsonTool.random(118.999, 119.005), 5);
     },
     "close": function () {
-        return JsonTool.formatFloat(JsonTool.random(118, 120), 5);
+        return JsonTool.formatFloat(JsonTool.random(118.999, 119.005), 5);
     },
     "buyChange": function () {
         return JsonTool.formatFloat(this.buying - this.close, 4);

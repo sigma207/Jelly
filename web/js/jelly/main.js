@@ -104,7 +104,7 @@ function logoClick(e) {
 }
 
 function onIndexLoad() {
-
+    console.log("onIndexLoad");
     quote1 = DragTable.createNew("quote1");
     quote2 = DragTable.createNew("quote2");
     forexMetalData = generateForexData();
@@ -128,10 +128,13 @@ function onIndexLoad() {
 }
 
 function changeLang(lang) {
+    console.log("lang="+lang);
     var option = {resGetPath: "locales/" + lang + "/jelly.json"};
     i18n.init(option, function (t) {
         document.title = t("main.pageTitle");
         $(".container").i18n();
+        quote1.changeLangClass(currentLang);
+        quote2.changeLangClass(currentLang);
     });
 }
 
@@ -148,6 +151,11 @@ function generateForexData(option) {
     for (var i = 0; i < forexMetalName.length; i++) {
         temp = Mock.mock(forexTemplate);
         temp.name = forexMetalName[i];
+        temp.decimal = forexMetalDecimal[i]+1;
+        temp.buying = JsonTool.formatFloat(temp.buying, temp.decimal);
+        temp.selling = JsonTool.formatFloat(temp.selling, temp.decimal);
+        temp.spread = (temp.buying-temp.selling)*(Math.pow(10,forexMetalDecimal[i]));
+
         data.push(temp);
     }
     return data;

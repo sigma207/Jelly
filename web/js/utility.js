@@ -6,7 +6,7 @@ $.browser = {};
 $.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase());
 $.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
 $.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
-$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase())||!!navigator.userAgent.match(/Trident.*rv\:11\./);
+$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase()) || !!navigator.userAgent.match(/Trident.*rv\:11\./);
 $.browser.lang = window.navigator.userLanguage || window.navigator.language;
 var JsonTool = {
     sortString: function (json, property, order) {
@@ -26,6 +26,9 @@ var JsonTool = {
                 return b[property] - a[property];
             }
         });
+    },
+    isInt: function (n) {
+        return Number(n) === n && n % 1 === 0;
     },
     formatFloat: function (num, pos) {
         var size = Math.pow(10, pos);

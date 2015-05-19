@@ -23,15 +23,71 @@
 
 }
 
-.stockRiseZh{
+.stockRise-zh-TW{
     color: #ad0000;
 }
 
-.stockFallZh{
+.stockFall-zh-TW{
     color: #00a900;
 }
 
-.forexRise{
+.stockRise-zh-CN{
+    color: #ad0000;
+}
+
+.stockFall-zh-CN{
+    color: #00a900;
+}
+
+.stockRise-en-US{
+    color: #00a900;
+}
+
+.stockFall-en-US{
+    color: #ad0000;
+}
+
+.forexRise-zh-TW{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #00a900;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexFall-zh-TW{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #ad0000;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexRise-zh-CN{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #00a900;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexFall-zh-CN{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #ad0000;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexRise-en-US{
+    display: inline;
+    color: #FFFFFF;
+    background-color: #ad0000;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.forexFall-en-US{
     display: inline;
     color: #FFFFFF;
     background-color: #00a900;
@@ -48,13 +104,7 @@
     /*border-color: transparent transparent #00ff00 transparent;*/
 }
 
-.forexFall{
-    display: inline;
-    color: #FFFFFF;
-    background-color: #ad0000;
-    padding-left: 5px;
-    padding-right: 5px;
-}
+
 
 .forexFallArrow{
     display: inline-block;
