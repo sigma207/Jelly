@@ -225,8 +225,9 @@ function drawVolumeAxis() {
 
 function drawRangeTimeText() {
     ctx.save();
+    ctx.fonts("10px 微軟正黑體");
     ctx.textAlign = "center";
-    var y = chartArea.y + 10;
+    var y = chartArea.y + 12;
     var timeIndex = 0;
     var timeStep = 0;
     if (info.displayTimeRange <= 30) {
@@ -250,7 +251,7 @@ function drawRangeTimeText() {
 
 function drawValueText() {
     ctx.save();
-    ctx.font = "10px 微軟正黑體";
+    ctx.fonts("10px 微軟正黑體");
     ctx.textAlign = "right";
     var x = valueAxis.x - 5;
     var y = valueAxis.y;
@@ -266,9 +267,9 @@ function drawValueText() {
 
 function drawVolumeText() {
     ctx.save();
-    ctx.font = "8px 微軟正黑體";
+    ctx.fonts("8px 微軟正黑體");
     ctx.textAlign = "right";
-    ctx.textBaseline = "bottom";
+    //ctx.textBaseline = "bottom";
     ctx.fillStyle = "blue";
     var x = volumeAxis.x - 5;
     var y = volumeAxis.y;
@@ -371,7 +372,8 @@ function drawInfo() {
     ctx.save();
     var x = canvas.width / 2;
     var y = 3;
-    ctx.font = "12px 微軟正黑體";
+    ctx.fonts("12px 微軟正黑體");
+    //ctx.font = "15px 微軟正黑體";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillText(drawData.name, x, y);
@@ -383,7 +385,7 @@ function drawValueVolumeInfo(data) {
 
     var variance = JsonTool.formatFloat(data[valueField] - drawData.close, 2);
     var multi = JsonTool.formatFloat(variance / drawData.close * 100, 2);
-    ctx.font = "12px 微軟正黑體";
+    ctx.fonts("12px 微軟正黑體");
     ctx.textBaseline = "top";
 
     var timeText = moment(data[timeField], "HHmm").format("HH:mm");

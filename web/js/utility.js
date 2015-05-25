@@ -5,9 +5,13 @@
 $.browser = {};
 $.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase());
 $.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+$.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase());
+$.browser.safari = /safari/.test(navigator.userAgent.toLowerCase());
 $.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
 $.browser.msie = /msie/.test(navigator.userAgent.toLowerCase()) || !!navigator.userAgent.match(/Trident.*rv\:11\./);
 $.browser.lang = window.navigator.userLanguage || window.navigator.language;
+console.log(navigator.userAgent.toLowerCase());
+console.log($.browser);
 var JsonTool = {
     sortString: function (json, property, order) {
         json.sort(function (a, b) {
