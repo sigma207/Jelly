@@ -245,6 +245,9 @@ var DragTable = {
             thList.attr(dt.ORDER_BY, "");//empty 'orderBy' attribute of all th
             $th.attr(dt.ORDER_BY, orderBy);//set 'orderBy' attribute of this th
             dt.renderDom();
+            if (dt.lang != "") {
+                dt.changeLangClass(dt.lang);
+            }
         };
         /**
          * ------------------------------------------------------------------
@@ -267,13 +270,12 @@ var DragTable = {
         };
 
         dt.onRowClick = function (e) {
+            e.originalEvent.stopPropagation();//防止click事件影响canvas判斷hide
             var tr = e.currentTarget;
-            //var evt = new Event("rowClick");
             var tableClass = dt.tableClass;
             var rowIndex = $(tr).attr("rowIndex");
             var rowData = dt.data[rowIndex];
-            $(document).trigger("rowClick", [tableClass, rowIndex, rowData]);
-            //document.dispatchEvent(evt);
+            $(document).trigger("rowClick", [tr, tableClass, rowIndex, rowData]);
         };
 
         dt.generateTr = function (rowIndex) {
@@ -394,26 +396,23 @@ var DragTable = {
                 return value;
             }
         };
-        dt.changeLang = function (lang) {
-
-        };
 
         dt.lastStockRiseClass = "";
         dt.lastStockFallClass = "";
         dt.lastForexRiseClass = "";
         dt.lastForexFallClass = "";
+        dt.lang = "";
         dt.changeLangClass = function (lang) {
-            //dt.FOREX_RISE_CLASS = "forexRise";
-            //dt.FOREX_FALL_CLASS = "forexFall";
+            dt.lang = lang;
             var table = $("." + tableClass);
-            var newStockRiseClass = dt.STOCK_RISE_CLASS+"-"+lang;
-            var newStockFallClass = dt.STOCK_FALL_CLASS+"-"+lang;
-            var newForexRiseClass = dt.FOREX_RISE_CLASS+"-"+lang;
-            var newForexFallClass = dt.FOREX_FALL_CLASS+"-"+lang;
-            table.find("."+dt.STOCK_RISE_CLASS).removeClass(dt.lastStockRiseClass).addClass(newStockRiseClass);
-            table.find("."+dt.STOCK_FALL_CLASS).removeClass(dt.lastStockFallClass).addClass(newStockFallClass);
-            table.find("."+dt.FOREX_RISE_CLASS).removeClass(dt.lastForexRiseClass).addClass(newForexRiseClass);
-            table.find("."+dt.FOREX_FALL_CLASS).removeClass(dt.lastForexFallClass).addClass(newForexFallClass);
+            var newStockRiseClass = dt.STOCK_RISE_CLASS + "-" + lang;
+            var newStockFallClass = dt.STOCK_FALL_CLASS + "-" + lang;
+            var newForexRiseClass = dt.FOREX_RISE_CLASS + "-" + lang;
+            var newForexFallClass = dt.FOREX_FALL_CLASS + "-" + lang;
+            table.find("." + dt.STOCK_RISE_CLASS).removeClass(dt.lastStockRiseClass).addClass(newStockRiseClass);
+            table.find("." + dt.STOCK_FALL_CLASS).removeClass(dt.lastStockFallClass).addClass(newStockFallClass);
+            table.find("." + dt.FOREX_RISE_CLASS).removeClass(dt.lastForexRiseClass).addClass(newForexRiseClass);
+            table.find("." + dt.FOREX_FALL_CLASS).removeClass(dt.lastForexFallClass).addClass(newForexFallClass);
             //rise.removeClass(dt.lastStockRiseClass);
             //rise.addClass(newStockRiseClass);
             //fall.removeClass(dt.lastStockFallClass);

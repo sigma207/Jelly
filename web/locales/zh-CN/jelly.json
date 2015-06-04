@@ -9,6 +9,8 @@
     "newsTitle": "网站公告",
     "news1": "·杰利科技网站正式上线~",
     "copyRight": "CopyrightⒸ2015 杰利科技股份有限公司 Jelly Technology Inc. 版权所有，不得转载",
+    "copyRight1": "CopyrightⒸ2015 杰利科技股份有限公司",
+    "copyRight2": "Jelly Technology Inc. 版权所有，不得转载",
     "serviceEmail": "service@jelly.com",
     "serviceEmailTo": "mailto:$t(main.serviceEmail)",
     "salesEmail": "sales@jelly.com",

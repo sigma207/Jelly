@@ -9,6 +9,8 @@
     "newsTitle": "網站公告",
     "news1": "‧傑利科技網站正式上線~",
     "copyRight": "CopyrightⒸ2015 傑利科技股份有限公司 Jelly Technology Inc. 版權所有，不得轉載",
+    "copyRight1": "CopyrightⒸ2015 傑利科技股份有限公司",
+    "copyRight2": "Jelly Technology Inc. 版權所有，不得轉載",
     "serviceEmail": "service@jelly.com",
     "serviceEmailTo": "mailto:$t(main.serviceEmail)",
     "salesEmail": "sales@jelly.com",
@@ -49,7 +51,7 @@
       "title": "傑利資訊科技股份有限公司",
       "describe1": "是一家以開發外匯, 期貨, 股票線上即時交易平台的公司。",
       "describe2": "早在2000年, 由對全世界各種交易市場有相當知識及對實時線上交易平台開發有豐富經驗的軟體團隊組成。",
-      "describe3": "期間整個團隊秉承著\"創新，務實，合作\"的精神下，在15年間不斷的吸取實務經驗，面向國際，緊跟潮流，完善及加強整個交易平台功能。開發出具有一個帳號同時可以交易外匯，貴金屬，全球期貨，股票的交易平台。我們的下單前台多元化，具有桌面ap，網頁和手機(ios,andriod)下單模式。這個交易平台已廣受客戶的認可和讚許。",
+      "describe3": "期間整個團隊秉承著\"創新，務實，合作\"的精神下，在15年間不斷的吸取實務經驗，面向國際，緊跟潮流，完善及加強整個交易平台功能。開發出具有一個帳號同時可以交易外匯，貴金屬，全球期貨，股票的交易平台。我們的下單前台多元化，具有桌面ap，網頁和手機(ios,android)下單模式。這個交易平台已廣受客戶的認可和讚許。",
       "describe4": "想知道更多有關公司的介紹"
     },
     "catalog": {

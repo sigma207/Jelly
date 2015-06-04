@@ -10,6 +10,7 @@ var canvas;
 var ctx;
 var drawData;
 var mouseLast = {};
+//var drawInitialImageData;
 var drawingAxisImageData;
 var drawingSurfaceImageData;
 var valueField, volumeField, timeField;
@@ -22,15 +23,22 @@ function rangeChartInit(value, volume, time) {
     timeField = time;
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
-    canvas.onmouseover = canvasOnMouseOver;
-    canvas.onmousedown = canvasOnMouseDown;
-    canvas.onmouseup = canvasOnMouseUp;
-    canvas.onmousemove = canvasOnMouseMove;
-    canvas.onmouseout = canvasOnMouseOut;
-    $("canvas").mousewheel(canvasOnMouseWheel);
+    if($.browser.mobile){
+        canvas.addEventListener("touchstart",onCanvasTouchStart,false);
+        canvas.addEventListener("touchend", onCanvasTouchEnd, false);
+        canvas.addEventListener("touchmove", onCanvasTouchMove, false);
+    }else{
+        canvas.onmouseover = canvasOnMouseOver;
+        canvas.onmousedown = canvasOnMouseDown;
+        canvas.onmouseup = canvasOnMouseUp;
+        canvas.onmousemove = canvasOnMouseMove;
+        canvas.onmouseout = canvasOnMouseOut;
+        $("canvas").mousewheel(canvasOnMouseWheel);
+    }
 }
 function runChart(data) {
     drawData = data;
+    //ctx.putImageData(drawInitialImageData, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     initChartArea();
     initVolumeAxis();
@@ -480,8 +488,8 @@ function convertVolumeY(volume) {
     return (volume - info.volumeMin) * info.volumeScale;
 }
 
-function mouseLocation(e) {
-    var temp = windowToCanvas(e.clientX, e.clientY);
+function mouseLocation(x,y) {
+    var temp = windowToCanvas(x, y);
     loc.x = temp.x;
     loc.y = temp.y;
     loc.index = xToRangeIndex(loc.x);
@@ -496,23 +504,104 @@ function dragStop() {
     }
 }
 
+
+function onCanvasTouchStart(e){
+    e.preventDefault();
+    var touches = e.changedTouches;
+    var touch = touches[0];
+    mouseLocation(touch.pageX, touch.pageY);
+    loc.startX = loc.x;
+    loc.startY = loc.y;
+    loc.move = false;
+}
+
+function onCanvasTouchEnd(e){
+    e.preventDefault();
+    var touches = e.changedTouches;
+    var touch = touches[0];
+    mouseLocation(touch.pageX, touch.pageY);
+    if (loc.inChartArea) {
+        if(!loc.move){
+            restoreDrawingSurface();
+        }
+        drawMouseInfo(loc.index);
+    }
+}
+
+function onCanvasTouchMove(e){
+    e.preventDefault();
+    var touches = e.changedTouches;
+    var touch = touches[0];
+    mouseLocation(touch.pageX, touch.pageY);
+    if (loc.inChartArea) {
+        var newTimeStartIndex = -1;
+        if (loc.x > mouseLast.x && info.timeEndIndex < info.numData - 1) {
+            newTimeStartIndex = info.timeStartIndex + 1;
+        } else if (loc.x < mouseLast.x && info.timeStartIndex > 0) {
+            newTimeStartIndex = info.timeStartIndex - 1;
+        }
+        if (newTimeStartIndex != -1) {
+            restoreDrawingAxisImageData();
+            changeTimeRange(newTimeStartIndex);
+        }
+
+        mouseLast.x = loc.x;
+        mouseLast.y = loc.y;
+        mouseLast.index = loc.index;
+        loc.move = true;
+    }
+}
+
+function canvasOnTap(e){
+    mouseLocation(e.pageX, e.pageY);
+    if (loc.inChartArea) {
+        restoreDrawingSurface();
+        drawMouseInfo(loc.index);
+    }
+}
+
+function canvasOnSwipeLeft(e){
+    var newTimeStartIndex = -1;
+    if (info.timeStartIndex > 0) {
+        newTimeStartIndex = info.timeStartIndex - 1;
+    }
+    swipe(newTimeStartIndex);
+}
+
+function canvasOnSwipeRight(e){
+    var newTimeStartIndex = -1;
+    if (info.timeEndIndex < info.numData - 1) {
+        newTimeStartIndex = info.timeStartIndex + 1;
+    }
+    swipe(newTimeStartIndex);
+}
+
+function swipe(newTimeStartIndex){
+    if (newTimeStartIndex != -1) {
+        restoreDrawingAxisImageData();
+        changeTimeRange(newTimeStartIndex);
+    }
+}
+
 function canvasOnMouseOver(e) {
     console.log("canvasOnMouseOver");
 }
 
 function canvasOnMouseDown(e) {
     e.preventDefault();
-    mouseLocation(e);
+    mouseLocation(e.clientX, e.clientY);
     if (loc.inChartArea) {
         restoreDrawingSurface();
         info.dragging = true;
+    }else {
+        restoreDrawingSurface();
     }
 }
 
 function canvasOnMouseMove(e) {
     //console.log("canvasOnMouseMove");
     e.preventDefault;
-    mouseLocation(e);
+    mouseLocation(e.clientX, e.clientY);
     if (loc.inChartArea) {
         if (info.dragging) {
             var newTimeStartIndex = -1;
@@ -551,7 +640,7 @@ function canvasOnMouseOut(e) {
 function canvasOnMouseUp(e) {
     e.preventDefault();
     dragStop();
-    mouseLocation(e);
+    mouseLocation(e.clientX, e.clientY);
     if (loc.inChartArea) {//如果還在範圍內才顯示資訊,有可能放開滑鼠時在chartArea外
         drawMouseInfo(mouseLast.index);
     }
@@ -565,7 +654,7 @@ function canvasOnMouseWheel(e, delta) {
         delta = -1;
     }
     addDisplayTimeRange(delta);
-    mouseLocation(e.originalEvent);
+    mouseLocation(e.originalEvent.x, e.originalEvent.y);
     if (loc.inChartArea) {//如果還在範圍內才顯示資訊,有可能放開滑鼠時在chartArea外
         restoreDrawingSurface();
         drawMouseInfo(loc.index);

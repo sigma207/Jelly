@@ -44,6 +44,9 @@ function contentLoad() {
     langSelect.val(currentLang).change();
 }
 function init() {
+    if($.browser.mobile){
+        window.location.href = "Mobile.html";
+    }
     logo = $(".logo");
     //$(".menuItem").on("click", menuClick);
     $(".menuImgItem").on("click", menuClick);

@@ -9,6 +9,7 @@ $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase());
 $.browser.safari = /safari/.test(navigator.userAgent.toLowerCase());
 $.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
 $.browser.msie = /msie/.test(navigator.userAgent.toLowerCase()) || !!navigator.userAgent.match(/Trident.*rv\:11\./);
+$.browser.mobile = !!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)||!!navigator.userAgent.match(/AppleWebKit/);
 $.browser.lang = window.navigator.userLanguage || window.navigator.language;
 console.log(navigator.userAgent.toLowerCase());
 console.log($.browser);
