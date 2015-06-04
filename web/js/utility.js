@@ -14,6 +14,13 @@ $.browser.lang = window.navigator.userLanguage || window.navigator.language;
 console.log(navigator.userAgent.toLowerCase());
 console.log($.browser);
 var JsonTool = {
+    length: function (obj) {
+        var count = 0;
+        for (var key in obj) {
+            count++;
+        }
+        return count;
+    },
     sortString: function (json, property, order) {
         json.sort(function (a, b) {
             if (order == "" || order == "asc") {

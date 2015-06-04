@@ -10,7 +10,6 @@ var canvas;
 var ctx;
 var drawData;
 var mouseLast = {};
-//var drawInitialImageData;
 var drawingAxisImageData;
 var drawingSurfaceImageData;
 var valueField, volumeField, timeField;
@@ -23,11 +22,11 @@ function rangeChartInit(value, volume, time) {
     timeField = time;
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
-    if($.browser.mobile){
-        canvas.addEventListener("touchstart",onCanvasTouchStart,false);
+    if ($.browser.mobile) {
+        canvas.addEventListener("touchstart", onCanvasTouchStart, false);
         canvas.addEventListener("touchend", onCanvasTouchEnd, false);
         canvas.addEventListener("touchmove", onCanvasTouchMove, false);
-    }else{
+    } else {
         canvas.onmouseover = canvasOnMouseOver;
         canvas.onmousedown = canvasOnMouseDown;
         canvas.onmouseup = canvasOnMouseUp;
@@ -106,7 +105,7 @@ function addDisplayTimeRange(addValue) {
 
     if (start >= 0 && end < info.numData) {
         restoreDrawingAxisImageData();
-        console.log("newRange=" + newRange + ",start=" + start + ",end=" + end);
+        //console.log("newRange=" + newRange + ",start=" + start + ",end=" + end);
         info.displayTimeRange = newRange;
         changeTimeRange(start);
         saveDrawingSurface();
@@ -488,7 +487,7 @@ function convertVolumeY(volume) {
     return (volume - info.volumeMin) * info.volumeScale;
 }
 
-function mouseLocation(x,y) {
+function mouseLocation(x, y) {
     var temp = windowToCanvas(x, y);
     loc.x = temp.x;
     loc.y = temp.y;
@@ -504,82 +503,94 @@ function dragStop() {
     }
 }
 
+var canvasTouchMap = {};
+var twoTouchDistance = 0;
+function TouchPoint(id, pageX, pageY) {
+    this.id = id;
+    this.pageX = pageX;
+    this.pageY = pageY;
+    var temp = windowToCanvas(pageX, pageY);
+    this.x = temp.x;
+    this.y = temp.y;
+    this.index = xToRangeIndex(this.x);
+    this.inChartArea = (this.x >= chartArea.x + info.timeRangeScale && this.x <= chartArea.right - info.timeRangeScale);
+    this.move = false;
+}
 
-function onCanvasTouchStart(e){
+function getTouchFromMapById(id) {
+    return canvasTouchMap["touch" + id];
+}
+
+function onCanvasTouchStart(e) {
+    e.preventDefault();
+    var touches = e.changedTouches;
+    for (var i = 0; i < touches.length; i++) {
+        var t = touches[i];
+        var tp = new TouchPoint(t.identifier, t.pageX, t.pageY);
+        canvasTouchMap["touch" + tp.id] = tp;
+    }
+    if (JsonTool.length(canvasTouchMap)  > 1) {
+        var tpList = [];
+        for (var key in canvasTouchMap) {
+            tpList.push(canvasTouchMap[key]);
+        }
+        twoTouchDistance = Math.abs(tpList[0].pageX - tpList[1].pageX);
+    }
+}
+
+function onCanvasTouchEnd(e) {
     e.preventDefault();
     var touches = e.changedTouches;
     var touch = touches[0];
-    mouseLocation(touch.pageX, touch.pageY);
-    loc.startX = loc.x;
-    loc.startY = loc.y;
-    loc.move = false;
+    if (JsonTool.length(canvasTouchMap) == 1) {
+        var tp = new TouchPoint(touch.identifier, touch.pageX, touch.pageY);
+        var startTp = getTouchFromMapById(tp.id);
+        if (tp.inChartArea) {
+            if(!startTp.move){
+                restoreDrawingSurface();
+            }
+            drawMouseInfo(tp.index);
+        }
+    }
+    delete canvasTouchMap["touch" + touch.identifier];
 }
 
-function onCanvasTouchEnd(e){
+function onCanvasTouchMove(e) {
     e.preventDefault();
     var touches = e.changedTouches;
-    var touch = touches[0];
-    mouseLocation(touch.pageX, touch.pageY);
-    if (loc.inChartArea) {
-        if(!loc.move){
-            restoreDrawingSurface();
+    if (JsonTool.length(canvasTouchMap) == 1) {
+        var touch = touches[0];
+        var tp = new TouchPoint(touch.identifier, touch.pageX, touch.pageY);
+        var startTp = getTouchFromMapById(tp.id);
+        if (tp.inChartArea) {
+            var newTimeStartIndex = -1;
+            if (tp.x > mouseLast.x && info.timeEndIndex < info.numData - 1) {
+                newTimeStartIndex = info.timeStartIndex + 1;
+            } else if (tp.x < mouseLast.x && info.timeStartIndex > 0) {
+                newTimeStartIndex = info.timeStartIndex - 1;
+            }
+            if (newTimeStartIndex != -1) {
+                restoreDrawingAxisImageData();
+                changeTimeRange(newTimeStartIndex);
+                startTp.move = true;
+            }
+
+            mouseLast.x = tp.x;
+            mouseLast.y = tp.y;
+            mouseLast.index = tp.index;
         }
-        drawMouseInfo(loc.index);
-    }
-}
-
-function onCanvasTouchMove(e){
-    e.preventDefault();
-    var touches = e.changedTouches;
-    var touch = touches[0];
-    mouseLocation(touch.pageX, touch.pageY);
-    if (loc.inChartArea) {
-        var newTimeStartIndex = -1;
-        if (loc.x > mouseLast.x && info.timeEndIndex < info.numData - 1) {
-            newTimeStartIndex = info.timeStartIndex + 1;
-        } else if (loc.x < mouseLast.x && info.timeStartIndex > 0) {
-            newTimeStartIndex = info.timeStartIndex - 1;
+    } else {
+        if (touches.length > 1) {
+            var newDistance = Math.abs(touches[0].pageX - touches[1].pageX);
+            var delta = 0;
+            if (newDistance > twoTouchDistance) {
+                delta = 1;
+            } else if (newDistance < twoTouchDistance) {
+                delta = -1;
+            }
+            twoTouchDistance = newDistance;
+            addDisplayTimeRange(delta);
         }
-        if (newTimeStartIndex != -1) {
-            restoreDrawingAxisImageData();
-            changeTimeRange(newTimeStartIndex);
-        }
-
-        mouseLast.x = loc.x;
-        mouseLast.y = loc.y;
-        mouseLast.index = loc.index;
-        loc.move = true;
-    }
-}
-
-function canvasOnTap(e){
-    mouseLocation(e.pageX, e.pageY);
-    if (loc.inChartArea) {
-        restoreDrawingSurface();
-        drawMouseInfo(loc.index);
-    }
-}
-
-function canvasOnSwipeLeft(e){
-    var newTimeStartIndex = -1;
-    if (info.timeStartIndex > 0) {
-        newTimeStartIndex = info.timeStartIndex - 1;
-    }
-    swipe(newTimeStartIndex);
-}
-
-function canvasOnSwipeRight(e){
-    var newTimeStartIndex = -1;
-    if (info.timeEndIndex < info.numData - 1) {
-        newTimeStartIndex = info.timeStartIndex + 1;
-    }
-    swipe(newTimeStartIndex);
-}
-
-function swipe(newTimeStartIndex){
-    if (newTimeStartIndex != -1) {
-        restoreDrawingAxisImageData();
-        changeTimeRange(newTimeStartIndex);
     }
 }
 
@@ -593,7 +604,7 @@ function canvasOnMouseDown(e) {
     if (loc.inChartArea) {
         restoreDrawingSurface();
         info.dragging = true;
-    }else {
+    } else {
         restoreDrawingSurface();
     }
 }
